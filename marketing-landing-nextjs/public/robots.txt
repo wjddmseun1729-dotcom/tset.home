@@ -1,0 +1,33 @@
+# robots.txt for 그로스랩 (GrowthLab)
+# https://your-marketing-company.com/robots.txt
+
+# 모든 검색엔진 크롤러 허용
+User-agent: *
+Allow: /
+
+# 사이트맵 위치
+Sitemap: https://your-marketing-company.com/sitemap.xml
+
+# 크롤링 속도 제한 (선택사항)
+# Crawl-delay: 1
+
+# 특정 디렉토리 차단 (필요시)
+# Disallow: /admin/
+# Disallow: /private/
+# Disallow: /api/
+
+# Googlebot 설정
+User-agent: Googlebot
+Allow: /
+
+# Bingbot 설정
+User-agent: Bingbot
+Allow: /
+
+# Yeti (네이버)
+User-agent: Yeti
+Allow: /
+
+# Daumoa (다음)
+User-agent: Daumoa
+Allow: /
