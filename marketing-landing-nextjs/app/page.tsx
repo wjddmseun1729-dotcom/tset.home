@@ -5,6 +5,11 @@ import { useState } from 'react';
 import { InteractiveRobotSpline } from '@/components/ui/interactive-3d-robot';
 import { Chatbot } from '@/components/ui/chatbot';
 import { NewsSection } from '@/components/ui/news-section';
+import { Header } from '@/components/ui/header';
+import { Footer } from '@/components/ui/footer';
+import Link from 'next/link';
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
 
 export default function Home() {
   const ROBOT_SCENE_URL = "https://prod.spline.design/PyzDhpQ9E5f1E3MT/scene.splinecode";
@@ -23,25 +28,23 @@ export default function Home() {
     e.preventDefault();
 
     try {
-      // Google Apps Script로 데이터 전송
-      const scriptUrl = process.env.NEXT_PUBLIC_GOOGLE_SCRIPT_URL;
+      // Firebase Firestore에 상담 신청 데이터 저장
+      await addDoc(collection(db, 'leads'), {
+        ...formData,
+        status: 'new', // new, contacted, converted, closed
+        createdAt: serverTimestamp(),
+      });
+      console.log('상담 신청이 Firebase에 저장되었습니다.');
 
+      // Google Apps Script로도 데이터 전송 (백업용)
+      const scriptUrl = process.env.NEXT_PUBLIC_GOOGLE_SCRIPT_URL;
       if (scriptUrl && scriptUrl !== 'https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec') {
-        await fetch(scriptUrl, {
+        fetch(scriptUrl, {
           method: 'POST',
-          mode: 'no-cors', // CORS 우회
-          headers: {
-            'Content-Type': 'application/json',
-          },
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(formData),
-        });
-        console.log('데이터가 구글 시트에 저장되었습니다.');
-      } else {
-        // 환경 변수가 설정되지 않은 경우 LocalStorage에 저장
-        console.warn('Google Script URL이 설정되지 않았습니다. LocalStorage에 저장합니다.');
-        const leads = JSON.parse(localStorage.getItem('leads') || '[]');
-        leads.push({ ...formData, timestamp: new Date().toISOString() });
-        localStorage.setItem('leads', JSON.stringify(leads));
+        }).catch(err => console.warn('구글 시트 저장 실패:', err));
       }
 
       // 성공 메시지 표시
@@ -81,19 +84,7 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-background text-foreground">
       {/* Navigation */}
-      <nav className="fixed top-0 w-full bg-background/90 backdrop-blur-lg border-b border-border z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="text-2xl font-bold text-primary">MarketingPro</div>
-            <button
-              onClick={scrollToForm}
-              className="px-6 py-2 bg-primary hover:opacity-90 text-primary-foreground rounded-lg font-semibold transition-all hover:-translate-y-0.5"
-            >
-              무료 상담 신청
-            </button>
-          </div>
-        </div>
-      </nav>
+      <Header />
 
       {/* Hero Section with 3D Background */}
       <section className="relative w-screen h-screen overflow-hidden">
@@ -390,49 +381,7 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-secondary border-t border-border py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-4 gap-8 mb-8">
-            <div>
-              <h3 className="text-xl font-bold mb-4">MarketingPro</h3>
-              <p className="text-muted-foreground">
-                데이터 기반 마케팅 자동화로
-                <br />
-                비즈니스 성장을 가속화합니다.
-              </p>
-            </div>
-            <div>
-              <h3 className="font-bold mb-4">서비스</h3>
-              <ul className="space-y-2 text-muted-foreground">
-                <li><a href="#" className="hover:text-primary transition-colors">마케팅 자동화</a></li>
-                <li><a href="#" className="hover:text-primary transition-colors">데이터 분석</a></li>
-                <li><a href="#" className="hover:text-primary transition-colors">SEO 최적화</a></li>
-                <li><a href="#" className="hover:text-primary transition-colors">SNS 마케팅</a></li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="font-bold mb-4">회사</h3>
-              <ul className="space-y-2 text-muted-foreground">
-                <li><a href="#" className="hover:text-primary transition-colors">회사 소개</a></li>
-                <li><a href="#" className="hover:text-primary transition-colors">고객 사례</a></li>
-                <li><a href="#" className="hover:text-primary transition-colors">블로그</a></li>
-                <li><a href="#" className="hover:text-primary transition-colors">채용</a></li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="font-bold mb-4">문의</h3>
-              <ul className="space-y-2 text-muted-foreground">
-                <li><a href="mailto:contact@marketingpro.com" className="hover:text-primary transition-colors">contact@marketingpro.com</a></li>
-                <li><a href="tel:02-1234-5678" className="hover:text-primary transition-colors">02-1234-5678</a></li>
-                <li className="mt-2">평일 09:00 - 18:00</li>
-              </ul>
-            </div>
-          </div>
-          <div className="text-center text-muted-foreground border-t border-border pt-8">
-            <p>&copy; 2024 MarketingPro. All rights reserved. | <a href="#" className="hover:text-primary">개인정보처리방침</a> | <a href="#" className="hover:text-primary">이용약관</a></p>
-          </div>
-        </div>
-      </footer>
+      <Footer />
 
       {/* 한국어 AI 챗봇 */}
       <Chatbot />

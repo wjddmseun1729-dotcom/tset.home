@@ -1,6 +1,7 @@
 // app/layout.tsx
 import type { Metadata } from "next";
 import "./globals.css";
+import { AuthProvider } from "@/lib/auth-context";
 
 // ✅ 실제 배포 도메인으로 교체하세요
 const siteUrl = "https://marketing-landing-nextjs-zeta.vercel.app";
@@ -112,7 +113,9 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className="font-pretendard antialiased">{children}</body>
+      <body className="font-pretendard antialiased">
+          <AuthProvider>{children}</AuthProvider>
+        </body>
     </html>
   );
 }
