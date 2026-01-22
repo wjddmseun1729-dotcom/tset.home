@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 // ✅ 실제 배포 도메인으로 교체하세요
-const siteUrl = "https://your-marketing-company.com";
+const siteUrl = "https://marketing-landing-nextjs-zeta.vercel.app";
 
 // ✅ 회사 정보 - 실제 정보로 교체하세요
 const companyName = "그로스랩"; // 회사명
@@ -27,9 +27,9 @@ export const metadata: Metadata = {
     googleBot: {
       index: true,
       follow: true,
-      maxSnippet: -1,
-      maxImagePreview: "large",
-      maxVideoPreview: -1,
+      "max-snippet": -1,
+      "max-image-preview": "large",
+      "max-video-preview": -1,
     },
   },
   openGraph: {
@@ -42,10 +42,11 @@ export const metadata: Metadata = {
     locale: "ko_KR",
     images: [
       {
-        url: `${siteUrl}/og-image.png`, // public/og-image.png (1200x630 권장)
+        url: "/og-image.png", // public/og-image.png (1200x630 권장)
         width: 1200,
         height: 630,
         alt: `${companyName} - 데이터 기반 마케팅 에이전시`,
+        type: "image/png",
       },
     ],
   },
@@ -54,7 +55,7 @@ export const metadata: Metadata = {
     title: `${companyName} | 데이터 기반 마케팅`,
     description:
       "500+ 브랜드와 함께한 검증된 마케팅 파트너. 무료 마케팅 진단 받아보세요.",
-    images: [`${siteUrl}/og-image.png`],
+    images: ["/og-image.png"],
     creator: "@growthlab", // ✅ 실제 트위터 핸들로 교체
   },
   keywords: [

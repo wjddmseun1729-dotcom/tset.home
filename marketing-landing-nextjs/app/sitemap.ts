@@ -2,7 +2,7 @@
 import { MetadataRoute } from 'next'
 
 // ✅ 실제 배포 도메인으로 교체하세요
-const siteUrl = 'https://your-marketing-company.com'
+const siteUrl = 'https://marketing-landing-nextjs-zeta.vercel.app'
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const currentDate = new Date()
