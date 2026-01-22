@@ -3,6 +3,8 @@
 
 import { useState } from 'react';
 import { InteractiveRobotSpline } from '@/components/ui/interactive-3d-robot';
+import { Chatbot } from '@/components/ui/chatbot';
+import { NewsSection } from '@/components/ui/news-section';
 
 export default function Home() {
   const ROBOT_SCENE_URL = "https://prod.spline.design/PyzDhpQ9E5f1E3MT/scene.splinecode";
@@ -125,6 +127,9 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* 마케팅 뉴스 섹션 */}
+      <NewsSection />
 
       {/* Lead Form Section */}
       <section className="py-20 bg-background">
@@ -429,13 +434,8 @@ export default function Home() {
         </div>
       </footer>
 
-      {/* Chatbot Trigger */}
-      <button
-        className="fixed bottom-8 right-8 w-16 h-16 bg-primary hover:opacity-90 rounded-full flex items-center justify-center text-primary-foreground font-bold text-sm shadow-lg hover:shadow-xl transition-all hover:scale-110 z-50"
-        aria-label="챗봇 문의"
-      >
-        문의
-      </button>
+      {/* 한국어 AI 챗봇 */}
+      <Chatbot />
     </main>
   );
 }
